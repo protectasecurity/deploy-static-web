@@ -10,7 +10,7 @@ import { CnameRecord, HostedZone } from 'aws-cdk-lib/aws-route53';
 
 
 export const REPOSITORY_REGEX = /^protectasecurity\/([a-z]{4})-(.+)$/gm;
-export const ZONE_NAME = 'protectasecuritycloud.pe'
+export const BASE_ZONE_NAME = 'protectasecuritycloud.pe'
 
 export class CdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -24,7 +24,8 @@ export class CdkStack extends cdk.Stack {
     if(customDomainName && !customCertificateArn) {
       throw Error('certificate is required for custom domain');
     }
-    const generatedDomainName = `${ name }.${ code }.${ env }.${ ZONE_NAME }`
+    const zoneName = `${ code }.${ env }.${ BASE_ZONE_NAME }`
+    const generatedDomainName = `${ name }.${ zoneName }`
     const domainName = customDomainName??generatedDomainName;
 
     const bucket = new Bucket(this, 'Bucket');
@@ -32,7 +33,7 @@ export class CdkStack extends cdk.Stack {
     const originAccessIdentity = new OriginAccessIdentity(this, 'Identity');
     bucket.grantRead(originAccessIdentity);
 
-    const zone = HostedZone.fromLookup(this, 'Zone',{ domainName: ZONE_NAME });
+    const zone = HostedZone.fromLookup(this, 'Zone',{ domainName: zoneName });
 
     let certificate: ICertificate
     if(customDomainName && customCertificateArn) {
