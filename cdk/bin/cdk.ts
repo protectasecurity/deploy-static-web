@@ -20,5 +20,9 @@ const app = new cdk.App();
 
 
 new CdkStack(app, 'StaticWebStack', {
-  stackName: repository.split('/')[1]
+  stackName: repository.split('/')[1],
+  env: {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: process.env.CDK_DEFAULT_REGION,
+  }
 });
