@@ -27,6 +27,10 @@ export class CdkStack extends cdk.Stack {
     const zoneName = `${ code }.${ env }.${ BASE_ZONE_NAME }`
     const generatedDomainName = `${ name }.${ zoneName }`
     const domainName = customDomainName??generatedDomainName;
+    
+    console.log(`Generated Domain Name: ${ generatedDomainName }`);
+    console.log(`Custom Domain Name:  ${ customDomainName }`);
+    console.log(`Deployment Domain Name:  ${ domainName }`);
 
     const bucket = new Bucket(this, 'Bucket');
     
@@ -57,7 +61,7 @@ export class CdkStack extends cdk.Stack {
     if(!customDomainName) {
       new CnameRecord(this, 'Record', {
         zone: zone,
-        recordName: domainName,
+        recordName: name,
         domainName: distribution.distributionDomainName,
         deleteExisting: true
       });  
