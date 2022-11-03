@@ -1,0 +1,64 @@
+name: 'Deploy Static Web GitHub Actions'
+branding:
+  icon: 'terminal'
+  color: 'orange'
+inputs:
+  artifact:
+    description: 'Artifact name to deploy'
+    required: false
+    default: dist
+  name:
+    description: 'Web name used to auto assign domain'
+    required: false
+    default: web
+  code:
+    description: 'Standard application code to auto assign domain'
+    required: false
+  domain:
+    description: 'Custom domain to assign to distribution'
+    required: false
+  certificate:
+    description: 'Certificate to use on distribution, required for custom domains'
+    required: false
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10' 
+
+    - name: Setup AWS CLI
+      run: pip install awscli
+      shell: bash
+
+    - name: Setup NodeJS
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - name: Setup AWS CDK
+      run: npm install -g aws-cdk
+      shell: bash
+
+    - name: Download Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ inputs.artifact }}
+        path: dist
+
+    - name: Deploy Static Web
+      run: |
+        export GITHUB_REPOSITORY=${{ github.repository }}
+        export GITHUB_REF_NAME=${{ github.ref_name }}
+        export GITHUB_WORKSPACE=${{ github.workspace }}
+        export INPUT_CODE=${{ inputs.code }}
+        export INPUT_NAME=${{ inputs.name }}
+        export INPUT_DOMAIN=${{ inputs.domain }}
+        export INPUT_CERTIFICATE=${{ inputs.certificate }}
+        cd ${{ github.action_path }}/cdk
+        cdk deploy
+      shell: bash
