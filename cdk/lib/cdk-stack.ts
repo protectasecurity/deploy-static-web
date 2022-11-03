@@ -26,11 +26,7 @@ export class CdkStack extends cdk.Stack {
     }
     const zoneName = `${ code }.${ env }.${ BASE_ZONE_NAME }`
     const generatedDomainName = `${ name }.${ zoneName }`
-    const domainName = customDomainName??generatedDomainName;
-    
-    console.log(`Generated Domain Name: ${ generatedDomainName }`);
-    console.log(`Custom Domain Name:  ${ customDomainName }`);
-    console.log(`Deployment Domain Name:  ${ domainName }`);
+    const domainName = customDomainName? customDomainName:generatedDomainName;
 
     const bucket = new Bucket(this, 'Bucket');
     
@@ -76,7 +72,7 @@ export class CdkStack extends cdk.Stack {
   }
 
   artifact(): string {
-    const workspace = process.env.GITHUB_WORKSPACE??'';
+    const workspace = process.env.GITHUB_WORKSPACE??'.';
     return `${ workspace }/dist`
   }
 
