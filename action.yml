@@ -64,5 +64,6 @@ runs:
         cd ${{ github.action_path }}/cdk
         npm ci
         npm run build
+        cdk bootstrap
         cdk deploy
       shell: bash
