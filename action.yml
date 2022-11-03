@@ -65,5 +65,5 @@ runs:
         npm ci
         npm run build
         cdk bootstrap
-        cdk deploy
+        cdk deploy --require-approval never
       shell: bash
