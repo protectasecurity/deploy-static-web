@@ -60,5 +60,6 @@ runs:
         export INPUT_DOMAIN=${{ inputs.domain }}
         export INPUT_CERTIFICATE=${{ inputs.certificate }}
         cd ${{ github.action_path }}/cdk
+        npm run build
         cdk deploy
       shell: bash
