@@ -54,7 +54,7 @@ export class CdkStack extends cdk.Stack {
       domainNames: [domainName],
       errorResponses: [{
         httpStatus: 404,
-        responsePagePath: 'index.html'
+        responsePagePath: '/index.html'
       }]
     });
 
