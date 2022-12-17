@@ -51,7 +51,11 @@ export class CdkStack extends cdk.Stack {
         origin: new S3Origin(bucket, {originAccessIdentity}),
       },
       certificate: certificate,
-      domainNames: [domainName]
+      domainNames: [domainName],
+      errorResponses: [{
+        httpStatus: 404,
+        responsePagePath: 'index.html'
+      }]
     });
 
     if(!customDomainName) {
